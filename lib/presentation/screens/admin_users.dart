@@ -100,6 +100,7 @@ class _Forms extends ConsumerStatefulWidget {
 
 class FormsStateRegister extends ConsumerState<_Forms> {
   late final LoadingButtonController _btnController;
+  bool isAdmin = true;
   @override
   void initState() {
     _btnController = LoadingButtonController();
@@ -147,39 +148,43 @@ class FormsStateRegister extends ConsumerState<_Forms> {
             ],
             labelText: 'Rol',
             onChanged: (value) {
-              registerUsersInstance.changeRole(value ?? 'Administrador');
+              registerUsersInstance.changeRole(value ?? 'Admin');
+              isAdmin = value == 'admin' ? true : false;
+              setState(() {});
             },
           ),
         ),
         const SizedBox(
           height: 20,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: listCenters.when(
-              data: (data) => DropDownSearch<String>(
-                    showSearchBox: true,
-                    selectedItem: 'Seleccione Centro',
-                    items: (data['centers'] as List<CenterCosts>)
-                        .map((e) => e.descripcionCuenta ?? '')
-                        .toList(),
-                    dropdownBuilder: (BuildContext context, String? item) {
-                      return Text(item ?? '');
-                    },
-                    labelText: 'Centro de Costos',
-                    onChanged: (value) {
-                      final listCenters = data['centers'] as List<CenterCosts>;
-                      final center = listCenters.firstWhere(
-                          (element) => element.descripcionCuenta == value);
-                      registerUsersInstance
-                          .changeLinkedCenterCodemp(center.codigoEmpresa ?? '');
-                      registerUsersInstance.changeLinkedCenterCodcuenta(
-                          center.codigoCuenta ?? '');
-                    },
-                  ),
-              error: (error, stackTrace) => Text(error.toString()),
-              loading: () => const CircularProgressIndicator()),
-        ),
+        if (!isAdmin)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: listCenters.when(
+                data: (data) => DropDownSearch<String>(
+                      showSearchBox: true,
+                      selectedItem: 'Seleccione Centro',
+                      items: (data['centers'] as List<CenterCosts>)
+                          .map((e) => e.descripcionCuenta ?? '')
+                          .toList(),
+                      dropdownBuilder: (BuildContext context, String? item) {
+                        return Text(item ?? '');
+                      },
+                      labelText: 'Centro de Costos',
+                      onChanged: (value) {
+                        final listCenters =
+                            data['centers'] as List<CenterCosts>;
+                        final center = listCenters.firstWhere(
+                            (element) => element.descripcionCuenta == value);
+                        registerUsersInstance.changeLinkedCenterCodemp(
+                            center.codigoEmpresa ?? '');
+                        registerUsersInstance.changeLinkedCenterCodcuenta(
+                            center.codigoCuenta ?? '');
+                      },
+                    ),
+                error: (error, stackTrace) => Text(error.toString()),
+                loading: () => const CircularProgressIndicator()),
+          ),
         const SizedBox(
           height: 20,
         ),
@@ -197,7 +202,8 @@ class FormsStateRegister extends ConsumerState<_Forms> {
         icon: Icons.add,
         btnController: _btnController,
         onPressed: () async {
-          final response = await registerUsersInstance.createUser(context);
+          final response =
+              await registerUsersInstance.createUser(context, isAdmin: isAdmin);
           if (response) {
             // ignore: use_build_context_synchronously
             await listUsersIntance.setUsersList(context);

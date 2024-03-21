@@ -26,8 +26,8 @@ class RegisterUsers extends _$RegisterUsers {
       state.name,
       state.email,
       state.role,
-      state.linkedCenterCodcuenta,
-      state.linkedCenterCodemp
+      // state.linkedCenterCodcuenta,
+      // state.linkedCenterCodemp
     ]);
   }
 
@@ -37,8 +37,8 @@ class RegisterUsers extends _$RegisterUsers {
       state.name,
       state.email,
       state.role,
-      state.linkedCenterCodcuenta,
-      state.linkedCenterCodemp
+      // state.linkedCenterCodcuenta,
+      // state.linkedCenterCodemp
     ]);
   }
 
@@ -48,8 +48,8 @@ class RegisterUsers extends _$RegisterUsers {
       state.name,
       state.email,
       state.role,
-      state.linkedCenterCodcuenta,
-      state.linkedCenterCodemp
+      // state.linkedCenterCodcuenta,
+      // state.linkedCenterCodemp
     ]);
   }
 
@@ -60,8 +60,8 @@ class RegisterUsers extends _$RegisterUsers {
       state.name,
       state.email,
       state.role,
-      state.linkedCenterCodcuenta,
-      state.linkedCenterCodemp
+      // state.linkedCenterCodcuenta,
+      // state.linkedCenterCodemp
     ]);
   }
 
@@ -72,12 +72,12 @@ class RegisterUsers extends _$RegisterUsers {
       state.name,
       state.email,
       state.role,
-      state.linkedCenterCodcuenta,
-      state.linkedCenterCodemp
+      // state.linkedCenterCodcuenta,
+      // state.linkedCenterCodemp
     ]);
   }
 
-  Future<bool> createUser(BuildContext context) async {
+  Future<bool> createUser(BuildContext context, {bool isAdmin = false}) async {
     if (!isValidForm || state.role.value.isEmpty) {
       // ignore: use_build_context_synchronously
       AnimatedSnackBar.material('Formulario no valido',
@@ -85,6 +85,17 @@ class RegisterUsers extends _$RegisterUsers {
               mobileSnackBarPosition: MobileSnackBarPosition.bottom)
           .show(context);
       return false;
+    }
+    if (!isAdmin) {
+      if (state.linkedCenterCodcuenta.value.isEmpty ||
+          state.linkedCenterCodemp.value.isEmpty) {
+        // ignore: use_build_context_synchronously
+        AnimatedSnackBar.material('Seleccionar centro de costos',
+                type: AnimatedSnackBarType.error,
+                mobileSnackBarPosition: MobileSnackBarPosition.bottom)
+            .show(context);
+        return false;
+      }
     }
     final RepositoryAuth respository =
         RepositoryAuthI(datasource: DatasourceAuthI());
@@ -96,6 +107,7 @@ class RegisterUsers extends _$RegisterUsers {
       role: state.role.value,
       linkedCenterCodcuenta: state.linkedCenterCodcuenta.value,
       linkedCenterCodemp: state.linkedCenterCodemp.value,
+      isAdmin: isAdmin,
     );
     final response = await useCaseAuth.callRegister(model, token ?? '');
     final isValidResponse =

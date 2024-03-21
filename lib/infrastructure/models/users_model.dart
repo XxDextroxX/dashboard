@@ -9,6 +9,7 @@ class UsersModel {
   bool? isDeleted;
   String? createdAt;
   String? updatedAt;
+  bool isAdmin;
 
   UsersModel({
     this.id,
@@ -21,6 +22,7 @@ class UsersModel {
     this.isDeleted,
     this.createdAt,
     this.updatedAt,
+    this.isAdmin = false,
   });
 
   factory UsersModel.fromJson(Map<String, dynamic> json) {

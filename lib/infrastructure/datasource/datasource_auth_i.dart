@@ -178,7 +178,6 @@ class DatasourceAuthI implements DatasourceAuth {
         'code': 201
       };
     } on DioException catch (e) {
-      print('error ${e.response?.data['message']}');
       if (e.response?.statusCode == 401) {
         return {
           'status': false,
@@ -246,14 +245,24 @@ class DatasourceAuthI implements DatasourceAuth {
   Future<Map<String, dynamic>> registerUser(
       UsersModel model, String token) async {
     try {
+      Object? data;
+      if (model.isAdmin) {
+        data = {
+          'name': model.name,
+          'role': model.role,
+          'email': model.email,
+        };
+      } else {
+        data = {
+          'name': model.name,
+          'role': model.role,
+          'email': model.email,
+          'linkedCenterCodemp': model.linkedCenterCodemp,
+          'linkedCenterCodcuenta': model.linkedCenterCodcuenta
+        };
+      }
       final response = await dio.post('/auth/register',
-          data: {
-            'name': model.name,
-            'role': model.role,
-            'email': model.email,
-            'linkedCenterCodemp': model.linkedCenterCodemp,
-            'linkedCenterCodcuenta': model.linkedCenterCodcuenta
-          },
+          data: data,
           options: Options(
             headers: {'Authorization': 'Bearer $token'},
           ));

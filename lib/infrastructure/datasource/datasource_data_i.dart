@@ -22,6 +22,7 @@ class DatasourceDataI implements DatasourceData {
     try {
       final response = await dio.get(path,
           options: Options(headers: {'Authorization': 'Bearer $token'}));
+      print('response: ${response}');
       final data = (response.data['data']) as Map<String, dynamic>;
       return {
         'status': true,
