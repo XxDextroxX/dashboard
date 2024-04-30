@@ -14,13 +14,15 @@ class ChartLine extends ConsumerStatefulWidget {
 }
 
 class ChartLineState extends ConsumerState<ChartLine> {
-  List<_SalesData> data = [];
+  List<_SalesData> dataExpenses = [];
+  List<_SalesData> dataBudget = [];
 
   @override
   void initState() {
     super.initState();
     widget.data.forEach((key, value) {
-      data.add(_SalesData(key, value['totalExpenses'].toDouble()));
+      dataExpenses.add(_SalesData(key, value['totalExpenses'].toDouble()));
+      dataBudget.add(_SalesData(key, value['presupuesto'].toDouble()));
     });
   }
 
@@ -33,7 +35,7 @@ class ChartLineState extends ConsumerState<ChartLine> {
     final getIndexToDetailsNotifier =
         ref.watch(getIndexToDetailsProvider.notifier);
     final centerCost = ref.watch(centerCostProvider);
-    // final isDataExpanded = ref.watch(isDataExpandedProvider);
+    final isLoadingNotifier = ref.watch(isLoadingProvider.notifier);
     return Container(
         padding: const EdgeInsets.all(10),
         height: 350,
@@ -53,7 +55,8 @@ class ChartLineState extends ConsumerState<ChartLine> {
               // Enable tooltip
               tooltipBehavior: TooltipBehavior(enable: true),
               onDataLabelTapped: (DataLabelTapDetails args) {
-                String centroDeCostos = data[args.pointIndex].centroDeCostos;
+                String centroDeCostos =
+                    dataExpenses[args.pointIndex].centroDeCostos;
                 int totalExpenses =
                     widget.data[centroDeCostos]['totalExpenses'];
                 int presupuesto = widget.data[centroDeCostos]['presupuesto'];
@@ -63,14 +66,23 @@ class ChartLineState extends ConsumerState<ChartLine> {
                 presupuestoIntance.changeValue(presupuesto);
                 centerCostNotifier.changeValue(centroDeCostos);
                 countsNotifier.changeValue(counts);
+                isLoadingNotifier.changeValue();
                 getIndexToDetailsNotifier.reset();
               },
               series: <CartesianSeries<_SalesData, String>>[
                 LineSeries<_SalesData, String>(
-                    dataSource: data,
+                    dataSource: dataExpenses,
                     xValueMapper: (_SalesData sales, _) => sales.centroDeCostos,
                     yValueMapper: (_SalesData sales, _) => sales.totalExpenses,
-                    name: centerCost,
+                    name: 'Gasto: $centerCost',
+                    // Enable data label
+                    dataLabelSettings:
+                        const DataLabelSettings(isVisible: true)),
+                LineSeries<_SalesData, String>(
+                    dataSource: dataBudget,
+                    xValueMapper: (_SalesData sales, _) => sales.centroDeCostos,
+                    yValueMapper: (_SalesData sales, _) => sales.totalExpenses,
+                    name: 'Presupuesto: $centerCost',
                     // Enable data label
                     dataLabelSettings: const DataLabelSettings(isVisible: true))
               ]),

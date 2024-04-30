@@ -23,12 +23,11 @@ final indexSelectorMonthProvider =
 );
 
 typedef _$IndexSelectorMonth = AutoDisposeNotifier<int>;
-String _$indexHomePageHash() => r'130364414011eeb5bd7bc95334231217aa5ba3cc';
+String _$indexHomePageHash() => r'bbe56559744b5bc4742af1aeebc1d06f0997960c';
 
 /// See also [IndexHomePage].
 @ProviderFor(IndexHomePage)
-final indexHomePageProvider =
-    AutoDisposeNotifierProvider<IndexHomePage, int>.internal(
+final indexHomePageProvider = NotifierProvider<IndexHomePage, int>.internal(
   IndexHomePage.new,
   name: r'indexHomePageProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -38,6 +37,6 @@ final indexHomePageProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$IndexHomePage = AutoDisposeNotifier<int>;
+typedef _$IndexHomePage = Notifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

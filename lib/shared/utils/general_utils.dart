@@ -1,11 +1,8 @@
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dashboard_app/config/config.dart';
 import 'package:dashboard_app/domain/domain.dart';
 import 'package:dashboard_app/infrastructure/infrastructure.dart';
-import 'package:dashboard_app/infrastructure/usecases/usecases.dart';
 import 'package:dashboard_app/shared/services/key_values_impl.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -18,9 +15,6 @@ class GeneralUtils {
 
   static Future<bool> validateResponse(
       Map<String, dynamic> response, BuildContext context) async {
-    // if (response['accessToken'] == null) {
-    //   return false;
-    // }
     if (!response['status'] && response['code'] == 401) {
       GeneralUtils.logout(context);
       return false;
@@ -54,19 +48,8 @@ class GeneralUtils {
     final useCaseAuth = UseCaseAuth(repository: respository);
     final keyValueStorage = KeyValuesImplementation();
     final accessToken = await GeneralUtils.getToken();
-    final response = await useCaseAuth.callLogout(accessToken ?? '');
-    // ignore: use_build_context_synchronously
-    await GeneralUtils.validateResponse(response, context);
+    await useCaseAuth.callLogout(accessToken ?? '');
     await keyValueStorage.removeKey('accessToken');
-    // ignore: use_build_context_synchronously
-    AnimatedSnackBar.material('Cierre de sesion exitoso',
-            type: AnimatedSnackBarType.success,
-            mobileSnackBarPosition: MobileSnackBarPosition.bottom)
-        // ignore: use_build_context_synchronously
-        .show(context);
-
-    // ignore: use_build_context_synchronously
-    context.go(PathRouter.login);
   }
 
   static Future<void> setToken(String token) async {

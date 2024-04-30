@@ -37,4 +37,10 @@ class RepositoryDataI extends RepositoryData {
       {String id = '', String year = ''}) async {
     return await datasource.callGetDatilsMovements(token, id: id, year: year);
   }
+
+  @override
+  Future<Map<String, dynamic>> getAccountLevel5(String token,
+      {required id, required String year, required String month}) {
+    return datasource.getAccountLevel5(token, id: id, year: year, month: month);
+  }
 }

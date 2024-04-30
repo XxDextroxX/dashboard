@@ -6,10 +6,11 @@ import 'package:dio/dio.dart';
 class DatasourceAuthI implements DatasourceAuth {
   final dio = Dio(
     BaseOptions(
-        baseUrl: Environment.apiUrl,
-        validateStatus: (status) {
-          return status! < 500;
-        }),
+      baseUrl: Environment.apiUrl,
+      // validateStatus: (status) {
+      //   return status! < 500;
+      // }
+    ),
   );
 
   @override

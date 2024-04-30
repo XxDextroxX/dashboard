@@ -156,7 +156,7 @@ class _ListCenterCostsProviderElement
   BuildContext get context => (origin as ListCenterCostsProvider).context;
 }
 
-String _$getDataToAdminHash() => r'6db7d30f5ba41548888657b29827fb8a4ef8375f';
+String _$getDataToAdminHash() => r'3db58f1d9acf3d37d6ee5b81d3659290e5bd8a6f';
 
 /// See also [getDataToAdmin].
 @ProviderFor(getDataToAdmin)
@@ -715,6 +715,187 @@ class _GetDetailsAccountProviderElement
   int get page => (origin as GetDetailsAccountProvider).page;
 }
 
+String _$getAccountLevel5Hash() => r'08c752d57fed31ffad037a5f7313a7b1bfc77b3d';
+
+/// See also [getAccountLevel5].
+@ProviderFor(getAccountLevel5)
+const getAccountLevel5Provider = GetAccountLevel5Family();
+
+/// See also [getAccountLevel5].
+class GetAccountLevel5Family extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [getAccountLevel5].
+  const GetAccountLevel5Family();
+
+  /// See also [getAccountLevel5].
+  GetAccountLevel5Provider call(
+    BuildContext context, {
+    String id = '',
+    String year = '',
+    String month = '',
+  }) {
+    return GetAccountLevel5Provider(
+      context,
+      id: id,
+      year: year,
+      month: month,
+    );
+  }
+
+  @override
+  GetAccountLevel5Provider getProviderOverride(
+    covariant GetAccountLevel5Provider provider,
+  ) {
+    return call(
+      provider.context,
+      id: provider.id,
+      year: provider.year,
+      month: provider.month,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getAccountLevel5Provider';
+}
+
+/// See also [getAccountLevel5].
+class GetAccountLevel5Provider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [getAccountLevel5].
+  GetAccountLevel5Provider(
+    BuildContext context, {
+    String id = '',
+    String year = '',
+    String month = '',
+  }) : this._internal(
+          (ref) => getAccountLevel5(
+            ref as GetAccountLevel5Ref,
+            context,
+            id: id,
+            year: year,
+            month: month,
+          ),
+          from: getAccountLevel5Provider,
+          name: r'getAccountLevel5Provider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getAccountLevel5Hash,
+          dependencies: GetAccountLevel5Family._dependencies,
+          allTransitiveDependencies:
+              GetAccountLevel5Family._allTransitiveDependencies,
+          context: context,
+          id: id,
+          year: year,
+          month: month,
+        );
+
+  GetAccountLevel5Provider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.context,
+    required this.id,
+    required this.year,
+    required this.month,
+  }) : super.internal();
+
+  final BuildContext context;
+  final String id;
+  final String year;
+  final String month;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(GetAccountLevel5Ref provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetAccountLevel5Provider._internal(
+        (ref) => create(ref as GetAccountLevel5Ref),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        context: context,
+        id: id,
+        year: year,
+        month: month,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _GetAccountLevel5ProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetAccountLevel5Provider &&
+        other.context == context &&
+        other.id == id &&
+        other.year == year &&
+        other.month == month;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, year.hashCode);
+    hash = _SystemHash.combine(hash, month.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetAccountLevel5Ref
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `year` of this provider.
+  String get year;
+
+  /// The parameter `month` of this provider.
+  String get month;
+}
+
+class _GetAccountLevel5ProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with GetAccountLevel5Ref {
+  _GetAccountLevel5ProviderElement(super.provider);
+
+  @override
+  BuildContext get context => (origin as GetAccountLevel5Provider).context;
+  @override
+  String get id => (origin as GetAccountLevel5Provider).id;
+  @override
+  String get year => (origin as GetAccountLevel5Provider).year;
+  @override
+  String get month => (origin as GetAccountLevel5Provider).month;
+}
+
 String _$isDataExpandedHash() => r'e8e2eb0c21cb644309d342c8a6e1dca17b3cf7c3';
 
 /// See also [IsDataExpanded].
@@ -762,7 +943,7 @@ final presupuestoProvider =
 );
 
 typedef _$Presupuesto = AutoDisposeNotifier<int>;
-String _$centerCostHash() => r'de4794998b0aaff1328b3442162552e053c91434';
+String _$centerCostHash() => r'd3e0121c7e06174fa47b336b0a7b62617b202ab1';
 
 /// See also [CenterCost].
 @ProviderFor(CenterCost)
@@ -808,5 +989,19 @@ final getIndexToDetailsProvider =
 );
 
 typedef _$GetIndexToDetails = Notifier<int>;
+String _$isLoadingHash() => r'a69f38e5a1fb1bc76d71a733aefc26958525555e';
+
+/// See also [IsLoading].
+@ProviderFor(IsLoading)
+final isLoadingProvider = AutoDisposeNotifierProvider<IsLoading, bool>.internal(
+  IsLoading.new,
+  name: r'isLoadingProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$isLoadingHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$IsLoading = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

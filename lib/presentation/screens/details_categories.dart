@@ -1,6 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dashboard_app/infrastructure/models/models.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
+import 'package:dashboard_app/shared/utils/utils.dart';
 import 'package:dashboard_app/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,6 @@ class DetailsCategoriesState extends ConsumerState<DetailsCategories> {
           month: (index + 1).toString(),
           page: getIndexToDetails),
     );
-    print('main $getIndexToDetails');
     return Scaffold(
         appBar: AppBar(
           title: Text('Código cuenta ${widget.codigoCuenta}'),
@@ -134,7 +134,8 @@ class DetailsCategoriesState extends ConsumerState<DetailsCategories> {
                                     DataCell(Text('${allData.indexOf(e) + 1}')),
                                     DataCell(Text(
                                         e.fecha.toString().substring(0, 10))),
-                                    DataCell(Text(e.debitos.toString())),
+                                    DataCell(Text(
+                                        '\$ ${GeneralUtils.formatearComoDinero(double.tryParse(e.debitos.toString()) ?? 0)}')),
                                     DataCell(SizedBox(
                                         width: 400,
                                         child: Text(e.comments ?? ''))),

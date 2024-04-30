@@ -34,4 +34,10 @@ class UseCaseData {
       {String id = '', String year = ''}) async {
     return await repository.callGetDatilsMovements(token, id: id, year: year);
   }
+
+  Future<Map<String, dynamic>> callGetAccountLevel5(String token,
+      {required id, required String year, required String month}) async {
+    return await repository.getAccountLevel5(token,
+        id: id, year: year, month: month);
+  }
 }

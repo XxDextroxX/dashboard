@@ -141,7 +141,7 @@ class RegisterUser extends _$RegisterUser {
         context.go(PathRouter.home);
         break;
       case 'supervisor':
-        context.go(PathRouter.home);
+        context.go(PathRouter.controlExpenses);
         break;
       case 'root':
         context.go(PathRouter.adminUsers);

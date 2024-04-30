@@ -8,4 +8,6 @@ abstract class DatasourceData {
       {String id = '', String year = '', String month = '', int page = 1});
   Future<Map<String, dynamic>> callGetDatilsMovements(String token,
       {String id = '', String year = ''});
+  Future<Map<String, dynamic>> getAccountLevel5(String token,
+      {required id, required String year, required String month});
 }

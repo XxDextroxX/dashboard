@@ -7,14 +7,15 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(appThemeProvider);
     return MaterialApp.router(
       title: 'Dashboard App',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme(isDarkmode: false).getTheme(),
+      theme: theme,
       routerConfig: appRouter,
     );
   }

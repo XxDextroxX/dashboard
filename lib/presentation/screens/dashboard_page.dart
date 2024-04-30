@@ -16,30 +16,45 @@ class DashBoardPage extends ConsumerStatefulWidget {
 class DashBoardPageState extends ConsumerState<DashBoardPage> {
   final year = DateTime.now().year;
   bool isAdmin = true;
+  int auxExpenses = 0;
+  int auxPresupuesto = 0;
   @override
   Widget build(BuildContext context) {
     final user = UserModel.instance();
     isAdmin = user.role == 'admin' ? true : false;
     final totalExpenses = ref.watch(totalExpensesProvider);
+    // final totalExpensesNotifier = ref.watch(totalExpensesProvider.notifier);
+    // final presupuestoNotifier = ref.watch(presupuestoProvider.notifier);
     final presupuesto = ref.watch(presupuestoProvider);
     final index = ref.watch(indexSelectorMonthProvider);
     final counts = ref.watch(countsProvider);
     final countsNotifier = ref.watch(countsProvider.notifier);
     final keys = counts.keys.toList();
     final isDataExpanded = ref.watch(isDataExpandedProvider);
+    final isLoading = ref.watch(isLoadingProvider);
     final getData = ref.watch(getDataToAdminProvider(context,
         year: year.toString(),
         month: (index + 1).toString(),
         isDataExpanded: isDataExpanded,
         isAdmin: isAdmin));
     return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            user.accounts?.descripcionCuenta ?? '',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ),
+      ),
+      drawer: const DrawerWidget(),
       body: SingleChildScrollView(
         child: getData.when(
           data: (data) {
             if (data['data'] == null || data['data'].isEmpty) {
               return const Column(
                 children: [
-                  MonthSelector(),
+                  // MonthSelector(),
                   SizedBox(
                     height: 200,
                   ),
@@ -47,20 +62,15 @@ class DashBoardPageState extends ConsumerState<DashBoardPage> {
                 ],
               );
             }
+            auxExpenses = data['totalExpenses'];
+            auxPresupuesto = data['presupuesto'];
             final dataNew = data['data'] as Map<String, dynamic>;
             return Column(
               children: [
-                if (!isAdmin)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      user.accounts?.descripcionCuenta ?? '',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
                 if (isAdmin) const MonthSelector(),
-                _expenses(expenses: totalExpenses, income: presupuesto),
+                _expenses(
+                    expenses: totalExpenses == 0 ? auxExpenses : totalExpenses,
+                    income: presupuesto == 0 ? auxPresupuesto : presupuesto),
                 if (isAdmin) const ButtonsChart(),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -93,16 +103,26 @@ class DashBoardPageState extends ConsumerState<DashBoardPage> {
                         itemBuilder: (context, index) {
                           final key = keys[index];
                           final value = counts[key];
-                          return ViewExpenses(
-                            codigoCuenta: value['codigoCuenta'],
-                            category: key,
-                            expenses: value['gastoPorcentual'] != null
-                                ? value['gastoPorcentual'].toDouble()
-                                : 0,
-                            debits: value['debitos'],
-                            credits: value['creditos'],
-                            balance: value['balance'],
-                          );
+                          // totalExpensesNotifier.changeValue(
+                          //     dataNew['Acumulado']['totalExpenses']);
+                          // presupuestoNotifier
+                          //     .changeValue(value['balance']['presupuesto']);
+                          // auxExpenses = dataNew['Acumulado']['totalExpenses'];
+                          // auxPresupuesto = value['balance']['presupuesto'];
+                          return !isLoading
+                              ? ViewExpenses(
+                                  codigoCuenta: value['codigoCuenta'],
+                                  category: key,
+                                  expenses: value['gastoPorcentual'] != null
+                                      ? value['gastoPorcentual'].toDouble()
+                                      : 0,
+                                  debits: value['debitos'],
+                                  credits: value['creditos'],
+                                  balance: value['balance'],
+                                )
+                              : const WidgetLoading(
+                                  isReduced: true,
+                                );
                         })
                     : const WidgetEmpty()
               ],

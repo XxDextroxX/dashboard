@@ -1,7 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:dashboard_app/infrastructure/models/models.dart';
 import 'package:dashboard_app/presentation/providers/providers.dart';
-import 'package:dashboard_app/shared/utils/utils.dart';
 import 'package:dashboard_app/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,23 +14,8 @@ class EditProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editar perfil'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              CustomDialogs.generalDialog(
-                context: context,
-                title: 'Cerrar Sesión',
-                content: '¿Desea cerrar sesión?',
-                onPressed: () {
-                  GeneralUtils.logout(context);
-                },
-              );
-            },
-            icon: const Icon(Icons.logout),
-          )
-        ],
       ),
-      // drawer: const CustomDrawer(),
+      drawer: const DrawerWidget(),
       body: const _FormProfile(),
     );
   }

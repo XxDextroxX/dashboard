@@ -1,6 +1,5 @@
 import 'package:dashboard_app/domain/domain.dart';
 import 'package:dashboard_app/infrastructure/infrastructure.dart';
-import 'package:dashboard_app/infrastructure/usecases/usecases.dart';
 import 'package:dashboard_app/shared/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -44,7 +43,11 @@ Future<Map<String, dynamic>> getDataToAdmin(
   }
   // ignore: use_build_context_synchronously
   GeneralUtils.validateResponse(response, context);
-  return response;
+  return {
+    'data': response['data'],
+    'totalExpenses': response['data']['Acumulado']['totalExpenses'],
+    'presupuesto': response['data']['Acumulado']['presupuesto'],
+  };
 }
 
 @riverpod
@@ -103,7 +106,7 @@ class Presupuesto extends _$Presupuesto {
 
 @riverpod
 class CenterCost extends _$CenterCost {
-  String centerCost = 'Selecione un centro de costo';
+  String centerCost = 'Selecione un mes';
   @override
   String build() {
     return centerCost;
@@ -114,7 +117,7 @@ class CenterCost extends _$CenterCost {
   }
 
   void reset() {
-    state = 'Selecione un centro de costo';
+    state = 'Selecione un mes';
   }
 }
 
@@ -169,6 +172,21 @@ Future<Map<String, dynamic>> getDetailsAccount(
   return response;
 }
 
+@riverpod
+Future<Map<String, dynamic>> getAccountLevel5(
+    GetAccountLevel5Ref ref, BuildContext context,
+    {String id = '', String year = '', String month = ''}) async {
+  final RepositoryData repository =
+      RepositoryDataI(datasource: DatasourceDataI());
+  final useCase = UseCaseData(repository: repository);
+  final token = await GeneralUtils.getToken();
+  final response = await useCase.callGetAccountLevel5(token ?? '',
+      id: id, year: year, month: month);
+  // ignore: use_build_context_synchronously
+  GeneralUtils.validateResponse(response, context);
+  return response;
+}
+
 @Riverpod(keepAlive: true)
 class GetIndexToDetails extends _$GetIndexToDetails {
   @override
@@ -186,5 +204,20 @@ class GetIndexToDetails extends _$GetIndexToDetails {
 
   void reset() {
     state = 1;
+  }
+}
+
+@riverpod
+class IsLoading extends _$IsLoading {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void changeValue() {
+    state = true;
+    Future.delayed(const Duration(seconds: 1), () {
+      state = false;
+    });
   }
 }

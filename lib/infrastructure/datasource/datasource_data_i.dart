@@ -6,10 +6,11 @@ import 'package:dio/dio.dart';
 class DatasourceDataI implements DatasourceData {
   final dio = Dio(
     BaseOptions(
-        baseUrl: Environment.apiUrl,
-        validateStatus: (status) {
-          return status! < 500;
-        }),
+      baseUrl: Environment.apiUrl,
+      // validateStatus: (status) {
+      //   return status! < 500;
+      // }
+    ),
   );
 
   @override
@@ -195,6 +196,47 @@ class DatasourceDataI implements DatasourceData {
       return {
         'status': true,
         'data': data,
+        'accessToken': response.data['accessToken'],
+        'message': 'Sesion activa',
+        'code': 200
+      };
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return {
+          'status': false,
+          'message': 'Error de autorizacion',
+          'code': 401,
+        };
+      }
+      return {
+        'status': false,
+        'message': '${e.response?.data['message']}',
+        'data': null,
+        'code': 500,
+        'accessToken': e.response?.data['accessToken'],
+      };
+    } catch (e) {
+      return {
+        'status': false,
+        'message': e.toString(),
+        'data': null,
+        'code': 500
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getAccountLevel5(String token,
+      {required id, required String year, required String month}) async {
+    try {
+      final response = await dio.get(
+          '/centrocosto/level-5-accounts/$id?year=$year&month=$month',
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      final data = (response.data['data']) as List;
+      final accounts = data.map((e) => ModelAccounts.fromJson(e)).toList();
+      return {
+        'status': true,
+        'data': accounts,
         'accessToken': response.data['accessToken'],
         'message': 'Sesion activa',
         'code': 200

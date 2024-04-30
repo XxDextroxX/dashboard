@@ -14,7 +14,7 @@ class IndexSelectorMonth extends _$IndexSelectorMonth {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class IndexHomePage extends _$IndexHomePage {
   @override
   int build() {
